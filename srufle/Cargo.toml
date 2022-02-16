@@ -1,0 +1,3 @@
+[workspace]
+# members = ["chapter01", "chapter02", "chapter03", "chapter04", "chapter05", "chapter06", "chapter09", "chapter10", "chapter11"]
+members = ["example_simple","example_pet_store",]

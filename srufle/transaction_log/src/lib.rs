@@ -42,6 +42,24 @@ impl TransactionLog {
         self.length += 1;
         self.tail = Some(new);
     }
+
+    pub fn pop(&mut self) -> Option<i32> {
+        // Take head if the is one, and look at next
+        // make next the new head
+        self.head.take().map(|head| {
+            if let Some(next) = head.borrow_mut().next.take() {
+                self.head = Some(next);
+            } else {
+                self.tail.take();
+            }
+            self.length -= 1;
+            Rc::try_unwrap(head)
+                .ok()
+                .expect("Something is wrong")
+                .into_inner()
+                .value
+        })
+    }
 }
 #[cfg(test)]
 mod tests {
@@ -71,5 +89,16 @@ mod tests {
         assert_eq!(log.length, 1);
         log.append(20);
         assert_eq!(log.length, 2);
+        log.append(30);
+        assert_eq!(log.length, 3);
+
+        let head = log.pop();
+        assert_eq!(head.unwrap(), 10);
+        let head = log.pop();
+        assert_eq!(head.unwrap(), 20);
+        let head = log.pop();
+        assert_eq!(head.unwrap(), 30);
+        let head = log.pop();
+        assert_eq!(head, None);
     }
 }

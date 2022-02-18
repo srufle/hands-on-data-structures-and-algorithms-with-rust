@@ -1,4 +1,4 @@
-use std::{cell::RefCell, rc::Rc};
+use std::{cell::RefCell, mem, rc::Rc};
 
 // Why are we using and Rc<RefCell> and not a Box
 // Box is for single ownership
@@ -21,6 +21,15 @@ struct TransactionLog {
 impl Node {
     fn new(value: i32) -> Rc<RefCell<Node>> {
         Rc::new(RefCell::new(Node { value, next: None }))
+    }
+}
+impl Drop for Node {
+    fn drop(&mut self) {
+        // replace next with empty, following the chain
+        let mut cur_next = mem::replace(&mut self.next, None);
+        while let Some(node) = cur_next {
+            cur_next = mem::replace(&mut node.borrow_mut().next, None);
+        }
     }
 }
 
@@ -100,5 +109,13 @@ mod tests {
         assert_eq!(head.unwrap(), 30);
         let head = log.pop();
         assert_eq!(head, None);
+    }
+
+    #[test]
+    fn transaction_log_many_items() {
+        let mut log = TransactionLog::new_empty();
+        for n in 1..10000 {
+            log.append(n * 2);
+        }
     }
 }

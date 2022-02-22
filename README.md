@@ -31,4 +31,13 @@ Working on problems from
 
 ## Chapter 04 - Lists, Lists, and More Lists
 
-    Further reading
+  Further reading
+
+- Learning Rust With Entirely Too Many Linked Lists
+  - <http://cglab.ca/~abeinges/blah/too-many-lists/book/README.html>
+- Implementing the Iterator trait
+  - <https://doc.rust-lang.org/std/iter/index.html#implementing-iterator>
+- Skip Lists: Done Right
+  - <https://doc.rust-lang.org/std/iter/index.html#implementing-iterator>
+- Skip Lists: A Probabilistic Alternative to Balanced Trees, William Pugh
+  - <https://www.epaperpress.com/sortsearch/download/skiplist.pdf>
